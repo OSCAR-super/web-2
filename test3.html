@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>品牌列表添加删除功能实现</title>
+    <script src="vue.js"></script>
+    <style>
+        .kk
+        {
+            display: flex;
+  flex-direction: column;
+            width:150px;
+            height:200px;
+            border-radius: 20px;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="pane1 pane1-primary">
+            <div class="pane1-heading">
+                <h3 class="pane1-titl">添加品牌</h3>
+            </div>
+            <div class="pane1-body form-inline">
+                <label>
+                    Id:
+                    <input type="text" class="form-control" v-model="id">
+                </label>
+                <label>
+                    Name：
+                    <input type="text" class="form-control" v-model="name">
+                </label>
+                <label>
+                    subject:
+                    <input type="text" class="form-control" v-model="subject">
+                </label>
+                <label>
+                    request:
+                    <input type="text" class="form-control" v-model="request">
+                </label>
+                <label>
+                    time:
+                    <input type="text" class="form-control" v-model="time">
+                </label>
+                <input type="button" value="添加" class="btn btn-primary" @click="add() ">
+                <label>
+                    搜索名称关键字：
+                    <input type="text" class="form-control" v-model="keywords">
+                </label>
+            </div>
+        </div>
+    
+        <table class="table table-bordered table-hover table-striped">
+            <tbody>
+                <tr v-for="item in search(keywords)" :key="item.id" class="kk">
+                    <td>{{item.id}}</td>
+                    <td v-text="item.name"></td>
+                    <td>{{item.subject}}</td>
+                    <td>教学要求：{{item.request}}</td>
+                    <td>截至时间：{{ item.time }}</td>
+                    <td><a href="" @click.prevent="del(item.id)">删除</a></td> 
+                </tr>
+            </tbody>
+        </table>
+ 
+    </div>
+    <script>
+    //创建Vue实例，得到ViewMod
+    var vm = new Vue({
+        el:'#app',
+        data: {
+            id:'',
+            name:'',
+            keywords:'',
+            subject:'',
+            request:'',
+            time:'',
+            list:[
+                { id:"9.6",name:"傅里叶级数",subject:"高等数学",request:"xxxxxxxxxxx",time:"2002.6.20" },
+                { id:"9.6",name:"傅里叶级数",subject:"高等数学",request:"xxxxxxxxxxx",time:"2021.4.20" },
+                { id:"9.6",name:"傅里叶级数",subject:"高等数学",request:"xxxxxxxxxxx",time:"2020.6.20" }
+ 
+            ],
+        },
+        methods: {
+            add(){
+                //添加的方法
+                var car = {id:this.id,name:this.name,subject:this.subject,request:this.request,time:this.time }
+                this.list.push(car)
+                
+                 
+            },
+            del(id){
+                this.list.some((item,i)=>{
+                    if(item.id==id){
+                        //删除功能
+                        this.list.splice(i,1);
+                        return true;
+                    }
+                })
+            },
+            search(keywords){
+                //根据关键字进行搜索
+                var newList=[]
+                this.list.forEach(item=>{
+                    if(item.name.indexOf(keywords)!=-1){
+                        newList.push(item)
+                    }
+                })
+                return newList
+            }
+        }
+        
+    });
+    
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <link rel="stylesheet" href="">
+        <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+        <style>
+            .nav {
+                overflow: hidden;
+                text-align: center;
+                background-color: #f4f4f4;
+            }
+            .nav li {
+                float: left;
+                padding: 5px;
+                width: 50px;
+                color: #666;
+                list-style: none;
+                border-left: 1px solid #f4f4f4;
+                cursor: pointer;
+            }
+            .nav li:hover,.selected {
+                background-color:#ecebeb;
+                border-left: 1px solid #ecebeb;
+            }
+            .content{
+                border: 1px solid #f4f4f4;
+                height: 800px;
+                padding: 10px;
+                overflow: hidden;
+            }
+        </style>
+           <style>
+            * {
+                margin: 0px;
+                padding: 0px;
+            }
+            
+            ul,
+            li {
+                list-style: none;
+            }
+            
+            #banner {
+                border: solid 5px pink;
+                width: 520px;
+                overflow: hidden;
+                margin: 100px auto;
+                position: relative;
+            }
+            
+            .imgs {
+                width: 2600px;
+                border: solid 1px black;
+            }
+            
+            .imgs li {
+                float: left;
+            }
+            
+            .imgs li img {
+                width: 520px;
+            }
+            
+            .cursor {
+                width: 30px;
+                height: 50px;
+                background: rgb(0, 0, 0, 0.3);
+                position: absolute;
+                top: 110px;
+                color: white;
+                font-size: 25px;
+                font-weight: bold;
+                text-align: center;
+                line-height: 50px;
+                cursor: pointer;
+            }
+            
+            .cursor:hover {
+                background: rgb(0, 0, 0, 0.6);
+            }
+            
+            .pre {
+                left: 0px;
+            }
+            
+            .next {
+                right: 0px;
+            }
+            
+            .dots {
+                position: absolute;
+                width: 100px;
+                left: 200px;
+                bottom: 10px;
+                border: solid 1px pink;
+                overflow: hidden;
+                padding: 5p 10px;
+            }
+            
+            .dots li {
+                float: left;
+                width: 10px;
+                height: 10px;
+                background: white;
+                border-radius: 5px;
+                margin: 5px 5px;
+            }
+            
+            .active {
+                background: pink!important;
+            }
+        </style>
+    </head>
+    <body>
+        <ul class="nav">
+            <li class="selected">公开课</li>
+            <li>导入课</li>
+        </ul>
+        <div class="content">
+            <div class="list ">
+                <div id="banner">
+                    <ul class="imgs">
+                        <li class="item"><img src="QQ图片20210417152005.jpg" alt=""></li>
+                        <li class="item"><img src="QQ图片20210417152453.jpg" alt=""></li>
+                        <li class="item"><img src="QQ图片20210417151206.jpg" alt=""></li>
+                        <li class="item"><img src="QQ图片20210417152321.jpg" alt=""></li>
+                        <li class="item"><img src="QQ图片20210417154324.jpg" alt=""></li>
+                    </ul>
+             
+                    <div class="cursor pre">&lt;</div>
+                    <div class="cursor next">&gt;</div>
+             
+                    <ul class="dots">
+                        <li class="btn active"></li>
+                        <li class="btn"></li>
+                        <li class="btn"></li>
+                        <li class="btn"></li>
+                        <li class="btn"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://study.zyjblogs.cn/web/js/jquery-3.5.1.min.js"></script>
+        <script>
+            var index = 0;
+            var timer = setInterval("next()", 3000);
+     
+            $("img").mouseover(
+                function() {
+                    clearTimeout(timer);
+                }
+            )
+            $("img").mouseout(
+                function() {
+                    clearTimeout(timer);
+                    timer = setInterval("next()", 3000);
+                }
+            )
+            $(".dots .btn").mouseover(
+                function() {
+                    index = $(this).index(); //获取点击元素的下标
+                    $(this).addClass("active").siblings().removeClass("active");
+                    $(".item").eq(index).fadeIn().siblings().fadeOut();
+                    clearTimeout(timer);
+                }
+            )
+            $(".dots .btn").mouseout(
+                function() {
+                    index = $(this).index(); //获取点击元素的下标
+                    $(this).addClass("active").siblings().removeClass("active");
+                    $(".item").eq(index).fadeIn().siblings().fadeOut();
+                    clearTimeout(timer);
+                    timer = setInterval("next()", 3000);
+                }
+            )
+     
+            function play() {
+                // var offset = index * (-520) + "px";
+                // $(".imgs").animate({
+                //     "margin-left": offset
+                // }, 1000)
+                $(".item").eq(index).fadeIn().siblings().fadeOut();
+                $(".dots li").removeClass("active").eq(index).addClass("active");
+     
+            }
+     
+            function next() {
+                index++;
+                if (index == 5) index = 0;
+                play();
+            }
+     
+            function pre() {
+                index--;
+                if (index == -1) index = 4;
+                play();
+            }
+            $(".next").click(next);
+            $(".pre").click(pre);
+        </script>
+        <script>
+                $(function(){
+                    //获取点击事件的对象
+                    $(".nav li").click(function(){
+                        //获取要显示或隐藏的对象
+                        var divShow = $(".content").children('.list');
+                        //判断当前对象是否被选中，如果没选中的话进入if循环
+                        if (!$(this).hasClass('selected')) {
+                            //获取当前对象的索引
+                            var index = $(this).index();
+                            //当前对象添加选中样式并且其同胞移除选中样式；
+                            $(this).addClass('selected').siblings('li').removeClass('selected');
+                            //索引对应的div块显示
+                            $(divShow[index]).show();
+                            //索引对应的div块的同胞隐藏
+                            $(divShow[index]).siblings('.list').hide();
+                        }
+                    });
+                });
+                
+        </script>
+    </body>
+    </html>
